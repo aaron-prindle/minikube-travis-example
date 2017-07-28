@@ -1,0 +1,14 @@
+
+sudo: required
+
+services:
+  - docker
+
+script:
+ - ./k8s-ci-initialize.sh
+ - docker build -t hellonode:test .
+ - ./kubectl run hellonode --image=hellonode:test --image-pull-policy=Never --replicas=1 --port=8080
+ - ./kubectl expose deployment hellonode --port=8080 --type=NodePort
+ - SERVICE_OUTPUT="$(./minikube service --url --wait=300 --interval=2 hellonode 2>/dev/null | xargs curl)"
+ - export SERVICE_OUTPUT
+ - ./test.sh
