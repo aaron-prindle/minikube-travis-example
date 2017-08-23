@@ -1,11 +1,14 @@
-apiVersion: v1
-kind: Service
-metadata:
-  name: hellonode
-spec:
-  selector:
-    run: hellonode
-  type: NodePort
-  ports:
-    port: 8080
-    targetPort: 8080
+apiVersion: v1                                                                     
+kind: Service                                                                      
+metadata:                                                                                                                
+  labels:                                                                          
+    app: hellonode                                                                 
+  name: hellonode                                                                                                                                                                                     
+spec:                                                                                                                            
+  ports:                                                                                                                                         
+  - port: 8080                                                                     
+    protocol: TCP                                                                  
+    targetPort: 8080                                                               
+  selector:                                                                        
+    app: hellonode                                                                                                                        
+  type: NodePort                                                                      

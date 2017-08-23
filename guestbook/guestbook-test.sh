@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 
 # Run all kubernetes components for the guestbook
 ./kubectl create -f guestbook/all-in-one/guestbook-all-in-one.yaml
