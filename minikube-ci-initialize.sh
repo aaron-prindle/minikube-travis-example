@@ -1,11 +1,11 @@
 # curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && chmod +x minikube
-# curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x kubectl
+curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x kubectl
 
 export MINIKUBE_WANTUPDATENOTIFICATION=false
 export MINIKUBE_WANTREPORTERRORPROMPT=false
 export MINIKUBE_HOME=$HOME
 export CHANGE_MINIKUBE_NONE_USER=true
-mkdir $HOME/.kube || true
+mkdir $HOME/.kube &> /dev/null || true
 touch $HOME/.kube/config
 
 export KUBECONFIG=$HOME/.kube/config
@@ -36,7 +36,7 @@ for i in {1..150} # timeout for 5 minutes
 do
      # Here we are making sure that kubectl is returning the addon pods for the namespace kube-system
      # Without this check, the second if statement won't be in the proper state for execution
-     if [[ $(./kubectl get po -n kube-system | tail -n +2 | awk '{print $1}' | grep "kube-addon-manager") ]]; then
+     if [[ $(./kubectl get po -n kube-system -l k8s-app=kube-dns | tail -n +2 | grep "kube-dns") ]]; then
        # Here we are taking the checking the number of running pods for the namespace kube-system
        # and making sure that the value on each side of the '/' is equal (ex: 3/3 pods running)
        # this is necessary to ensure that all addons have come up
