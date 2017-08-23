@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: hellonode
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: hellonode
+    spec:
+      containers:
+      - image: hellonode:test
+        imagePullPolicy: Never
+        name: hellonode
+        ports:
+        - containerPort: 8080
