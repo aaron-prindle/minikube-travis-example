@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # Copyright 2017 Google, Inc. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && chmod +x minikube
+curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && chmod +x minikube
 curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x kubectl
 
 export MINIKUBE_WANTUPDATENOTIFICATION=false
@@ -23,7 +25,6 @@ mkdir $HOME/.kube &> /dev/null || true
 touch $HOME/.kube/config
 
 export KUBECONFIG=$HOME/.kube/config
-# TODO(aaron-prindle) resolve SecureAPIServer issue w/ --none driver and addon-manager
 sudo -E ./minikube start --vm-driver=none --extra-config=apiserver.InsecureServingOptions.BindAddress="127.0.0.1" --extra-config=apiserver.InsecureServingOptions.BindPort="8080"
 
 # this for loop waits until kubectl can access the api server that minikube has created
@@ -38,7 +39,7 @@ do
   sleep 2
 done
 if [ "$KUBECTL_UP" != "true" ]; then
-  echo "TEST FAILURE: kubectl could not reach api-server in allotted time"
+  echo "INIT FAILURE: kubectl could not reach api-server in allotted time"
   exit 1
 fi
 # kubectl commands are now able to interact with minikube cluster
@@ -55,7 +56,7 @@ do
        # and making sure that the value on each side of the '/' is equal (ex: 3/3 pods running)
        # this is necessary to ensure that all addons have come up
        if [[ ! $(./kubectl get po -n kube-system | tail -n +2 | awk '{print $2}' | grep -wEv '^([1-9]+)\/\1$') ]]; then
-         echo "TEST SUCCESS: all kubernetes addons pods are up and running"
+         echo "INIT SUCCESS: all kubernetes addons pods are up and running"
          KUBE_ADDONS_UP="true"
          break
      fi
@@ -63,7 +64,7 @@ do
   sleep 2
 done
 if [ "$KUBE_ADDONS_UP" != "true" ]; then
-  echo "TEST FAILURE: kubernetes addons did not come up in allotted time"
+  echo "INIT FAILURE: kubernetes addons did not come up in allotted time"
   exit 1
 fi
 # kube-addons is available for cluster services

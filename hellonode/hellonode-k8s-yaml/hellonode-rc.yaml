@@ -24,7 +24,7 @@ spec:
         app: hellonode
     spec:
       containers:
-      - image: hellonode:test
+      - image: hellonode:v1
         imagePullPolicy: Never
         name: hellonode
         ports:
