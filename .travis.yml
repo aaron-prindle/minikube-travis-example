@@ -8,6 +8,9 @@ script:
  - ./minikube-ci-initialize.sh
  - ./kubectl create -f hellonode/hellonode-k8s-yaml/hellonode-rc.yaml
  - ./kubectl create -f hellonode/hellonode-k8s-yaml/hellonode-svc.yaml
- - SERVICE_URL="$(./minikube service --url --wait=300 --interval=2 hellonode 2>/dev/null)"
- - export SERVICE_URL
+ - ./kubectl get po
+ - ./kubectl get svc
+ - ./kubectl get endpoints
+ - HELLONODE_URL="$(./kubectl get svc hellonode -o go-template='{{ .spec.clusterIP }}{{ "\n" }}')":8080
+ - export HELLONODE_URL
  - ./hellonode/hellonode-test.sh
