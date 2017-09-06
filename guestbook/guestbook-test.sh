@@ -15,7 +15,7 @@
 # limitations under the License.
 
 # Run all kubernetes components for the guestbook
-./kubectl create -f guestbook/all-in-one/guestbook-all-in-one.yaml
+./kubectl create -f all-in-one/guestbook-all-in-one.yaml
 # ======
 # Test that writes to guestbook fronted and checks that a value is propogated to redis-master/slave and frontend
 # ======

@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-docker build -t php-redis:v1 -f guestbook/php-redis/Dockerfile guestbook/php-redis/
-docker build -t redis-slave:v1 -f guestbook/redis-slave/Dockerfile guestbook/redis-slave/ 
+docker build -t php-redis:v1 -f php-redis/Dockerfile php-redis/
+docker build -t redis-slave:v1 -f redis-slave/Dockerfile redis-slave/ 
 ./minikube-ci-initialize.sh
 ./guestbook-test.sh
