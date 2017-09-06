@@ -15,7 +15,7 @@
 # limitations under the License.
 
 set -e
-HELLONODE_OUTPUT="$(curl $HELLONODE_URL)"
+HELLONODE_OUTPUT="$(curl --connect-timeout 5 --max-time 10 --retry 5 --retry-delay 5 --retry-max-time 300 $HELLONODE_URL)"
 if [ "$HELLONODE_OUTPUT" != "HELLO" ]; then
   echo "TEST FAILURE: Unexpected output from hellonode service"
   exit 1
