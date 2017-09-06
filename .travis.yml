@@ -1,15 +1,13 @@
 sudo: required
-dist: trusty
+
 services:
   - docker
-addons:
-  chrome: stable
-
-before_install:
-  - sudo apt-get install redis-tools -y
 
 script:
- - docker build -t php-redis:v1 -f guestbook/php-redis/Dockerfile guestbook/php-redis/
- - docker build -t redis-slave:v1 -f guestbook/redis-slave/Dockerfile guestbook/redis-slave/ 
+ - docker build -t hellonode:v1 hellonode-app/
  - ./minikube-ci-initialize.sh
- - ./guestbook/guestbook-test.sh
+ - ./kubectl create -f hellonode-k8s-yaml/hellonode-rc.yaml
+ - ./kubectl create -f hellonode-k8s-yaml/hellonode-svc.yaml
+ - SERVICE_URL="$(./minikube service --url --wait=300 --interval=2 hellonode 2>/dev/null)"
+ - export SERVICE_URL
+ - ./hellonode-test.sh
