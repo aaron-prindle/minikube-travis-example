@@ -11,6 +11,6 @@ script:
  - ./kubectl get po
  - ./kubectl get svc
  - ./kubectl get endpoints
- - HELLONODE_URL="$(./kubectl get svc hellonode -o go-template='{{ .spec.clusterIP }}{{ "\n" }}')":8080
+ - HELLONODE_URL="kubectl get svc hellonode -o go-template='{{.spec.clusterIP}}:{{ index (index .spec.ports 0) "nodePort" }}{{ "\n" }}'"
  - export HELLONODE_URL
  - ./hellonode/hellonode-test.sh
